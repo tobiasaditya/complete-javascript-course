@@ -1,5 +1,9 @@
 'use strict';
 
+const btnRollDice = document.querySelector('.btn--roll')
+const btnHold = document.querySelector('.btn--hold')
+
+
 const playerScores = document.querySelectorAll('.score')
 const playerCurrentScores = document.querySelectorAll('.current-score')
 let currentNumber = 0
@@ -33,7 +37,13 @@ function restartGame() {
         cs.textContent = 0
     }
 
+    document.querySelector(`.player--${currentPlayer}`).classList.remove("player--winner")
+    document.querySelector(`.player--${currentPlayer}`).classList.add("player--active")
     document.querySelector(".dice").classList.add("hidden")
+
+
+    btnRollDice.disabled = false
+    btnHold.disabled = false
 }
 
 
@@ -74,7 +84,16 @@ function hold() {
     document.getElementById(`score--${currentPlayer}`).textContent = players[currentPlayer].score
     document.getElementById(`current--${currentPlayer}`).textContent = 0
 
-    changePlayer()
+    if (players[currentPlayer].score >= 10) {
+        document.querySelector(`.player--${currentPlayer}`).classList.add("player--winner")
+        document.querySelector(`.player--${currentPlayer}`).classList.remove("player--active")
+        document.querySelector(".dice").classList.add("hidden")
+        btnRollDice.disabled = true
+        btnHold.disabled = true
+    } else {
+        changePlayer()
+    }
+
 }
 
 function changePlayer() {
@@ -91,10 +110,8 @@ function changePlayer() {
 const btnRestart = document.querySelector('.btn--new')
 btnRestart.addEventListener('click', restartGame)
 
-const btnRollDice = document.querySelector('.btn--roll')
 btnRollDice.addEventListener('click', rollDice)
 
-const btnHold = document.querySelector('.btn--hold')
 btnHold.addEventListener('click', hold)
 
 
