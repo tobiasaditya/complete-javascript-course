@@ -93,4 +93,15 @@ function displayMovements(movements) {
     })
 }
 
-displayMovements(account1.movements)
+// displayMovements(account1.movements)
+
+function checkDogs(dogsJulia, dogsKate) {
+    let correctedDogsJulia = dogsJulia.slice(1, -2)
+    let allDogs = correctedDogsJulia.concat(dogsKate)
+
+    allDogs.forEach(function (value, idx, _) {
+        console.log(`Dog number ${idx + 1} is ${value < 3 ? "is still a puppy" : "is and adult, and is " + value + " years old"}`)
+    })
+}
+
+checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3])
