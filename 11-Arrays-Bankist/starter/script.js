@@ -93,15 +93,62 @@ function displayMovements(movements) {
     })
 }
 
-// displayMovements(account1.movements)
+displayMovements(account1.movements)
 
-function checkDogs(dogsJulia, dogsKate) {
-    let correctedDogsJulia = dogsJulia.slice(1, -2)
-    let allDogs = correctedDogsJulia.concat(dogsKate)
-
-    allDogs.forEach(function (value, idx, _) {
-        console.log(`Dog number ${idx + 1} is ${value < 3 ? "is still a puppy" : "is and adult, and is " + value + " years old"}`)
+function createUsername(accounts) {
+    accounts.forEach(function (account) {
+        account.username = account.owner.split(" ").map(function (v, i, _) {
+            return v[0]
+        }).join("")
     })
+
 }
 
-checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3])
+function calcDisplayBalance(movements) {
+    let balance = movements.reduce(function (accumulator, value, idx, _) {
+        return accumulator + value
+    }, 0)
+
+    labelBalance.textContent = balance
+}
+
+calcDisplayBalance(account1.movements)
+
+
+// function checkDogs(dogsJulia, dogsKate) {
+//     let correctedDogsJulia = dogsJulia.slice(1, -2)
+//     let allDogs = correctedDogsJulia.concat(dogsKate)
+
+//     allDogs.forEach(function (value, idx, _) {
+//         console.log(`Dog number ${idx + 1} is ${value < 3 ? "is still a puppy" : "is and adult, and is " + value + " years old"}`)
+//     })
+// }
+
+// checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3])
+
+function calcAverageHumanAge(ages) {
+    let humanAges = ages.map(function (v, i) {
+        if (v <= 2) {
+            return 2 * v
+        } else {
+            return 16 + v * 4
+        }
+    })
+
+    let filtered = humanAges.filter(function (v, i) {
+        if (v > 18) {
+            return v
+        }
+    })
+
+    let avgAge = filtered.reduce(function (acc, v, i) {
+        return acc + v
+    }, 0) / filtered.length
+
+    console.log(humanAges)
+    console.log(filtered)
+    console.log(avgAge)
+}
+
+
+calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3])
