@@ -225,6 +225,25 @@ function closeAccount(event) {
     console.log(accounts)
 }
 
+function loan(event) {
+    console.log("loan")
+    event.preventDefault()
+
+    let loanAmount = Number(inputLoanAmount.value)
+
+    if (loanAmount > 0 && currentAccount.movements.some(mov => mov >= loanAmount * 0.1)) {
+        console.log("boleh nih")
+
+        currentAccount.movements.push(loanAmount)
+        refreshUI(currentAccount)
+
+    }
+
+    inputLoanAmount.value = null
+
+
+}
+
 function refreshUI(account) {
     displayMovements(account.movements)
     calcDisplayBalance(account)
@@ -234,6 +253,7 @@ function refreshUI(account) {
 btnLogin.addEventListener('click', login)
 btnTransfer.addEventListener('click', transfer)
 btnClose.addEventListener('click', closeAccount)
+btnLoan.addEventListener('click', loan)
 
 
 
