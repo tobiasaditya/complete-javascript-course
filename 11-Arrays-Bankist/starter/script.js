@@ -114,6 +114,46 @@ function calcDisplayBalance(movements) {
 
 calcDisplayBalance(account1.movements)
 
+function calcDisplaySummary(movements) {
+    let incomes = movements.filter(function (v, i) {
+        if (v > 0) {
+            return v
+        }
+    }).reduce(function (acc, v) {
+        return acc + v
+    }, 0)
+
+    let outcomes = movements.filter(function (v, i) {
+        if (v < 0) {
+            return v
+        }
+    }).reduce(function (acc, v) {
+        return acc + v
+    }, 0)
+
+    let interest = movements.filter(function (v, i) {
+        if (v > 0) {
+            return v
+        }
+    }).map(function (v, i) {
+        return v * 1.2 / 100
+    }).filter(function (v, i) {
+        if (v > 1) {
+            return v
+        }
+    }).reduce(function (acc, v) {
+        return acc + v
+    }, 0)
+
+
+    labelSumIn.textContent = incomes
+    labelSumOut.textContent = outcomes * -1
+    labelSumInterest.textContent = interest
+
+}
+
+calcDisplaySummary(account1.movements)
+
 
 // function checkDogs(dogsJulia, dogsKate) {
 //     let correctedDogsJulia = dogsJulia.slice(1, -2)
@@ -126,29 +166,29 @@ calcDisplayBalance(account1.movements)
 
 // checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3])
 
-function calcAverageHumanAge(ages) {
-    let humanAges = ages.map(function (v, i) {
-        if (v <= 2) {
-            return 2 * v
-        } else {
-            return 16 + v * 4
-        }
-    })
+// function calcAverageHumanAge(ages) {
+//     let humanAges = ages.map(function (v, i) {
+//         if (v <= 2) {
+//             return 2 * v
+//         } else {
+//             return 16 + v * 4
+//         }
+//     })
 
-    let filtered = humanAges.filter(function (v, i) {
-        if (v > 18) {
-            return v
-        }
-    })
+//     let filtered = humanAges.filter(function (v, i) {
+//         if (v > 18) {
+//             return v
+//         }
+//     })
 
-    let avgAge = filtered.reduce(function (acc, v, i) {
-        return acc + v
-    }, 0) / filtered.length
+//     let avgAge = filtered.reduce(function (acc, v, i) {
+//         return acc + v
+//     }, 0) / filtered.length
 
-    console.log(humanAges)
-    console.log(filtered)
-    console.log(avgAge)
-}
+//     console.log(humanAges)
+//     console.log(filtered)
+//     console.log(avgAge)
+// }
 
 
-calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3])
+// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3])
