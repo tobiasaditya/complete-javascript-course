@@ -206,6 +206,25 @@ function transfer(event) {
     inputTransferTo.value = null
 }
 
+function closeAccount(event) {
+    event.preventDefault()
+    console.log(accounts)
+
+    let inputUsername = inputCloseUsername.value
+    let inputPin = Number(inputClosePin.value)
+
+    if (currentAccount.username === inputUsername && currentAccount.pin === inputPin) {
+        let accIdx = accounts.findIndex(acc => acc.username === currentAccount.username)
+
+        if (accIdx != -1) {
+            accounts.splice(accIdx, 1)
+            containerApp.style.opacity = 0
+        }
+    }
+
+    console.log(accounts)
+}
+
 function refreshUI(account) {
     displayMovements(account.movements)
     calcDisplayBalance(account)
@@ -214,6 +233,7 @@ function refreshUI(account) {
 
 btnLogin.addEventListener('click', login)
 btnTransfer.addEventListener('click', transfer)
+btnClose.addEventListener('click', closeAccount)
 
 
 
