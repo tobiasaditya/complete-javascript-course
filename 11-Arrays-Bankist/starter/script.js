@@ -93,29 +93,33 @@ function displayMovements(movements) {
     })
 }
 
-displayMovements(account1.movements)
+
 
 function createUsername(accounts) {
     accounts.forEach(function (account) {
         account.username = account.owner.split(" ").map(function (v, i, _) {
             return v[0]
-        }).join("")
+        }).join("").toLowerCase()
     })
 
 }
 
-function calcDisplayBalance(movements) {
-    let balance = movements.reduce(function (accumulator, value, idx, _) {
+createUsername(accounts)
+
+function calcDisplayBalance(account) {
+    let balance = account.movements.reduce(function (accumulator, value, idx, _) {
         return accumulator + value
     }, 0)
+
+    account.currentBalance = balance
 
     labelBalance.textContent = balance
 }
 
-calcDisplayBalance(account1.movements)
 
-function calcDisplaySummary(movements) {
-    let incomes = movements.filter(function (v, i) {
+
+function calcDisplaySummary(account) {
+    let incomes = account.movements.filter(function (v, i) {
         if (v > 0) {
             return v
         }
@@ -123,7 +127,7 @@ function calcDisplaySummary(movements) {
         return acc + v
     }, 0)
 
-    let outcomes = movements.filter(function (v, i) {
+    let outcomes = account.movements.filter(function (v, i) {
         if (v < 0) {
             return v
         }
@@ -131,12 +135,12 @@ function calcDisplaySummary(movements) {
         return acc + v
     }, 0)
 
-    let interest = movements.filter(function (v, i) {
+    let interest = account.movements.filter(function (v, i) {
         if (v > 0) {
             return v
         }
     }).map(function (v, i) {
-        return v * 1.2 / 100
+        return v * account.interestRate / 100
     }).filter(function (v, i) {
         if (v > 1) {
             return v
@@ -152,7 +156,65 @@ function calcDisplaySummary(movements) {
 
 }
 
-calcDisplaySummary(account1.movements)
+
+
+let currentAccount
+
+function login(event) {
+    event.preventDefault()
+    let username = inputLoginUsername.value
+    let pin = inputLoginPin.value
+
+    currentAccount = accounts.find(acc => acc.username == username &&
+        acc.pin == pin)
+    console.log(currentAccount)
+
+    if (currentAccount) {
+        labelWelcome.textContent = "Welcome, " +
+            currentAccount.owner.split(" ")[0]
+        containerApp.style.opacity = 100
+
+        refreshUI(currentAccount)
+    }
+
+    //Clear input field
+    inputLoginUsername.value = null
+    inputLoginPin.value = null
+}
+
+function transfer(event) {
+    event.preventDefault()
+
+    let transferAmount = Number(inputTransferAmount.value)
+    let transferDestination = accounts.find(owner => owner.username == inputTransferTo.value)
+
+    //validate amount
+    if (transferAmount > 0 &&
+        transferDestination &&
+        currentAccount.currentBalance >= transferAmount &&
+        transferDestination != currentAccount) {
+        console.log(transferAmount, transferDestination)
+
+        currentAccount.movements.push(-transferAmount)
+        transferDestination.movements.push(transferAmount)
+
+        refreshUI(currentAccount)
+
+    }
+
+    inputTransferAmount.value = null
+    inputTransferTo.value = null
+}
+
+function refreshUI(account) {
+    displayMovements(account.movements)
+    calcDisplayBalance(account)
+    calcDisplaySummary(account)
+}
+
+btnLogin.addEventListener('click', login)
+btnTransfer.addEventListener('click', transfer)
+
 
 
 // function checkDogs(dogsJulia, dogsKate) {
