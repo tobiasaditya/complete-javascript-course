@@ -76,10 +76,13 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 /////////////////////////////////////////////////
 
 
-function displayMovements(movements) {
+function displayMovements(movements, sort = false) {
     //Clear container first
     containerMovements.innerHTML = ''
-    movements.forEach(function (value, idx, _) {
+
+    let processedMove = sort ? movements.slice().sort((a, b) => a - b) : movements
+    console.log(processedMove)
+    processedMove.forEach(function (value, idx, _) {
 
 
         let type = value < 0 ? "withdrawal" : "deposit";
@@ -221,8 +224,6 @@ function closeAccount(event) {
             containerApp.style.opacity = 0
         }
     }
-
-    console.log(accounts)
 }
 
 function loan(event) {
@@ -244,6 +245,14 @@ function loan(event) {
 
 }
 
+let sorted = false
+
+function sortMovement(event) {
+    sorted = !sorted
+    event.preventDefault()
+    displayMovements(currentAccount.movements, sorted)
+}
+
 function refreshUI(account) {
     displayMovements(account.movements)
     calcDisplayBalance(account)
@@ -254,6 +263,7 @@ btnLogin.addEventListener('click', login)
 btnTransfer.addEventListener('click', transfer)
 btnClose.addEventListener('click', closeAccount)
 btnLoan.addEventListener('click', loan)
+btnSort.addEventListener('click', sortMovement)
 
 
 
