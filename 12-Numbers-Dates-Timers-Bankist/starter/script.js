@@ -81,18 +81,20 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (account, sort = false) {
     containerMovements.innerHTML = '';
 
-    const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
-
+    const movs = sort ? account.movements.slice().sort((a, b) => a - b) : account.movements;
+    console.log(account.movementsDates)
     movs.forEach(function (mov, i) {
+        let movementDate = new Date(account.movementsDates[i])
         const type = mov > 0 ? 'deposit' : 'withdrawal';
 
         const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${i + 1
             } ${type}</div>
+        <div class="movements__date">${movementDate.getDate() + "/" + movementDate.getMonth() + "/" + movementDate.getFullYear()}</div>  
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -140,14 +142,28 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 
 const updateUI = function (acc) {
+    //Time now
+    console.log(acc)
+    let now = new Date()
+    let date = (now.getDate() + "").padStart(2, "0")
+    let month = (now.getMonth() + 1 + "").padStart(2, "0")
+    let year = now.getFullYear()
+
+    let hour = ("" + now.getHours()).padStart(2, "0")
+    let minute = ("" + now.getMinutes()).padStart(2, "0")
+    let second = ("" + now.getSeconds()).padStart(2, "0")
+
+
     // Display movements
-    displayMovements(acc.movements);
+    displayMovements(acc);
 
     // Display balance
     calcDisplayBalance(acc);
 
     // Display summary
     calcDisplaySummary(acc);
+
+    labelDate.textContent = `${date}/${month}/${year} ${hour}:${minute}:${second}`
 };
 
 ///////////////////////////////////////
@@ -242,10 +258,10 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
     e.preventDefault();
-    displayMovements(currentAccount.movements, !sorted);
+    displayMovements(currentAccount, !sorted);
     sorted = !sorted;
+    updateUI(currentAccount)
 });
-
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
