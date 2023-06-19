@@ -233,11 +233,16 @@ btnLoan.addEventListener('click', function (e) {
     const amount = Number(inputLoanAmount.value);
 
     if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-        // Add movement
-        currentAccount.movements.push(amount);
 
-        // Update UI
-        updateUI(currentAccount);
+        setTimeout(function () {
+            // Add movement
+            currentAccount.movements.push(amount);
+            currentAccount.movementsDates.push(new Date().toISOString())
+
+            // Update UI
+            updateUI(currentAccount);
+        }, 3000)
+
     }
     inputLoanAmount.value = '';
 });
@@ -275,3 +280,17 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+
+setInterval(() => {
+    let timeNow = new Date()
+    let formatTimeNow = new Intl.DateTimeFormat(navigator.language, {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric'
+    }).format(timeNow)
+    labelDate.textContent = formatTimeNow
+}, 1000)
