@@ -88,13 +88,14 @@ const displayMovements = function (account, sort = false) {
     console.log(account.movementsDates)
     movs.forEach(function (mov, i) {
         let movementDate = new Date(account.movementsDates[i])
+        let intMovDate = new Intl.DateTimeFormat(currentAccount.locale).format(movementDate)
         const type = mov > 0 ? 'deposit' : 'withdrawal';
 
         const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${i + 1
             } ${type}</div>
-        <div class="movements__date">${movementDate.getDate() + "/" + movementDate.getMonth() + "/" + movementDate.getFullYear()}</div>  
+        <div class="movements__date">${intMovDate}</div>  
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -143,15 +144,17 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
     //Time now
-    console.log(acc)
+    console.log()
     let now = new Date()
-    let date = (now.getDate() + "").padStart(2, "0")
-    let month = (now.getMonth() + 1 + "").padStart(2, "0")
-    let year = now.getFullYear()
-
-    let hour = ("" + now.getHours()).padStart(2, "0")
-    let minute = ("" + now.getMinutes()).padStart(2, "0")
-    let second = ("" + now.getSeconds()).padStart(2, "0")
+    let options = {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric'
+    }
+    let intlDate = new Intl.DateTimeFormat(navigator.language, options).format(now)
 
 
     // Display movements
@@ -163,7 +166,7 @@ const updateUI = function (acc) {
     // Display summary
     calcDisplaySummary(acc);
 
-    labelDate.textContent = `${date}/${month}/${year} ${hour}:${minute}:${second}`
+    labelDate.textContent = intlDate
 };
 
 ///////////////////////////////////////
@@ -209,8 +212,11 @@ btnTransfer.addEventListener('click', function (e) {
         receiverAcc?.username !== currentAccount.username
     ) {
         // Doing the transfer
+        let transferDate = new Date()
         currentAccount.movements.push(-amount);
+        currentAccount.movementsDates.push(transferDate.toISOString())
         receiverAcc.movements.push(amount);
+        receiverAcc.movementsDates.push(transferDate.toISOString())
 
         // Update UI
         updateUI(currentAccount);
