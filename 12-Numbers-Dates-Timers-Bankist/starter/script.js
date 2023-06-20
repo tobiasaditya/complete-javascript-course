@@ -170,6 +170,8 @@ const updateUI = function (acc) {
     // Display summary
     calcDisplaySummary(acc);
 
+    startLogOutTimer()
+
     labelDate.textContent = intlDate
 };
 
@@ -280,6 +282,22 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+function startLogOutTimer() {
+    let time = 10
+    labelTimer.textContent = Math.floor(time / 60).toString().padStart(2, "0") + ":" + (time % 60).toString().padStart(2, "0");
+    const timer = setInterval(function () {
+        labelTimer.textContent = Math.floor(time / 60).toString().padStart(2, "0") + ":" + (time % 60).toString().padStart(2, "0");
+        time--
+
+        if (time == -1) {
+            clearInterval(timer)
+            labelWelcome.textContent = `Login to continue!`;
+            containerApp.style.opacity = 0;
+
+        }
+    }, 1000)
+}
 
 
 setInterval(() => {
