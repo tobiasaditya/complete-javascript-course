@@ -170,7 +170,11 @@ const updateUI = function (acc) {
     // Display summary
     calcDisplaySummary(acc);
 
-    startLogOutTimer()
+    if (timer) {
+        clearInterval(timer)
+    }
+
+    timer = startLogOutTimer()
 
     labelDate.textContent = intlDate
 };
@@ -178,6 +182,7 @@ const updateUI = function (acc) {
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
+let timer;
 
 btnLogin.addEventListener('click', function (e) {
     // Prevent form from submitting
@@ -200,6 +205,9 @@ btnLogin.addEventListener('click', function (e) {
 
         // Update UI
         updateUI(currentAccount);
+
+
+
     }
 });
 
@@ -297,6 +305,8 @@ function startLogOutTimer() {
 
         }
     }, 1000)
+
+    return timer
 }
 
 
