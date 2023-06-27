@@ -117,3 +117,21 @@ buttonScrollTo.addEventListener('click', function (e) {
     //Newer Way
     section1.scrollIntoView({ behavior: 'smooth' })
 })
+
+const h1 = document.querySelector("h1")
+
+function alertH1(e) {
+    alert("eventListener: event on heading")
+
+}
+
+h1.addEventListener('mouseenter', alertH1)
+
+setTimeout(() => {
+    h1.removeEventListener('mouseenter', alertH1)
+}, 3000)
+
+//Old Way
+// h1.onmouseenter = function (e) {
+//     alert("eventListener: event on heading")
+// }
