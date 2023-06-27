@@ -168,3 +168,19 @@ navLink.addEventListener('click', function (e) {
 //     navLink.style.backgroundColor = randomColor()
 //     // e.stopPropagation()
 // })
+
+
+//DOM TRANSVERSING
+
+
+const h1 = document.querySelector('h1')
+//Selecting child, no matter how downward it takes
+console.log(h1.querySelectorAll(".highlight"))
+console.log(h1.children)
+//Selecting parent, no matter how upward it takes
+console.log(h1.closest(".header"))
+//Selecting sibling
+console.log(h1.nextElementSibling)
+console.log(h1.previousElementSibling)
+console.log(h1.parentElement.children)
+
