@@ -34,3 +34,65 @@ document.addEventListener('keydown', function (e) {
         closeModal();
     }
 });
+
+
+///lecture
+//Select elements
+console.log(document.documentElement)
+console.log(document.head)
+console.log(document.body)
+
+const header = document.querySelector(".header")
+const allSections = document.querySelectorAll(".section")
+
+console.log(allSections)
+
+console.log(document.getElementById("section--1"))
+const allButtons = document.getElementsByTagName("button")
+console.log(allButtons)
+
+console.log(document.getElementsByClassName("btn"))
+
+//Create and insert element
+// insertAdjacentHTML
+
+const message = document.createElement('div')
+message.classList.add("cookie-message")
+message.textContent = "We use cookies for I don't know what."
+message.innerHTML = "We use cookies for I don't know what. <button class='btn btn--close-cookie'> Got it! </button?>"
+
+// header.prepend(message)
+// header.append(message.cloneNode(true))
+header.append(message)
+
+header.before(message)
+header.after(message)
+
+//Delete elements
+
+document.querySelector(".btn--close-cookie").addEventListener('click', (e) => {
+    message.remove()
+})
+
+
+//Styles
+message.style.backgroundColor = "#37383d"
+message.style.width = '120%'
+console.log(message.style.width)
+
+console.log(getComputedStyle(message).height)
+
+
+document.documentElement.style.setProperty("--color-primary", "orangered")
+
+
+//Attribute
+const logo = document.querySelector(".nav__logo")
+logo.alt = "Coba set alt logo"
+logo.setAttribute('alt', "Dari method")
+console.log(logo.getAttribute('alt'))
+console.log(logo.getAttribute('class'))
+
+//Data Attribute
+console.log(logo.dataset)
+
