@@ -56,6 +56,16 @@ buttonScrollTo.addEventListener('click', function (e) {
     section1.scrollIntoView({ behavior: 'smooth' })
 })
 
+const navLink = document.querySelector(".nav__links")
+navLink.addEventListener('click', function (e) {
+    e.preventDefault()
+
+    if (e.target.classList.contains('nav__link')) {
+        document.querySelector(e.target.getAttribute('href')).scrollIntoView({ 'behavior': 'smooth' })
+    }
+
+})
+
 
 // ///lecture
 // //Select elements
