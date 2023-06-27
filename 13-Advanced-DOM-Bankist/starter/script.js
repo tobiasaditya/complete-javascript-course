@@ -35,6 +35,27 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
+const buttonScrollTo = document.querySelector(".btn--scroll-to")
+const section1 = document.getElementById("section--1")
+
+buttonScrollTo.addEventListener('click', function (e) {
+    const s1coords = section1.getBoundingClientRect()
+    console.log(s1coords)
+    console.log(e.target.getBoundingClientRect())
+    console.log("Current Scroll ", scrollX, scrollY)
+
+    //Scrolling
+    //Old way
+    // window.scrollTo({
+    //     left: s1coords.left,
+    //     top: s1coords.top + scrollY, //ditambah Y biar jadi posisi absolut section1 ga peduli scrollnya
+    //     behavior: 'smooth'
+    // })
+
+    //Newer Way
+    section1.scrollIntoView({ behavior: 'smooth' })
+})
+
 
 // ///lecture
 // //Select elements
@@ -96,42 +117,44 @@ document.addEventListener('keydown', function (e) {
 // //Data Attribute
 // console.log(logo.dataset)
 
+// const h1 = document.querySelector("h1")
 
-const buttonScrollTo = document.querySelector(".btn--scroll-to")
-const section1 = document.getElementById("section--1")
+// function alertH1(e) {
+//     alert("eventListener: event on heading")
 
-buttonScrollTo.addEventListener('click', function (e) {
-    const s1coords = section1.getBoundingClientRect()
-    console.log(s1coords)
-    console.log(e.target.getBoundingClientRect())
-    console.log("Current Scroll ", scrollX, scrollY)
+// }
 
-    //Scrolling
-    //Old way
-    // window.scrollTo({
-    //     left: s1coords.left,
-    //     top: s1coords.top + scrollY, //ditambah Y biar jadi posisi absolut section1 ga peduli scrollnya
-    //     behavior: 'smooth'
-    // })
+// h1.addEventListener('click', alertH1)
 
-    //Newer Way
-    section1.scrollIntoView({ behavior: 'smooth' })
-})
-
-const h1 = document.querySelector("h1")
-
-function alertH1(e) {
-    alert("eventListener: event on heading")
-
-}
-
-h1.addEventListener('mouseenter', alertH1)
-
-setTimeout(() => {
-    h1.removeEventListener('mouseenter', alertH1)
-}, 3000)
+// setTimeout(() => {
+//     h1.removeEventListener('click', alertH1)
+// }, 3000)
 
 //Old Way
 // h1.onmouseenter = function (e) {
 //     alert("eventListener: event on heading")
 // }
+
+//rgb(255,255,255)
+// const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
+// const randomColor = () => `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`
+
+
+// console.log(randomColor())
+
+// const navLink = document.querySelector('.nav__link')
+// const navLinks = document.querySelector('.nav__links')
+// const nav = document.querySelector('.nav')
+
+// nav.addEventListener('click', function (e) {
+//     nav.style.backgroundColor = randomColor()
+// })
+
+// navLinks.addEventListener('click', function (e) {
+//     navLinks.style.backgroundColor = randomColor()
+// })
+
+// navLink.addEventListener('click', function (e) {
+//     navLink.style.backgroundColor = randomColor()
+//     // e.stopPropagation()
+// })
