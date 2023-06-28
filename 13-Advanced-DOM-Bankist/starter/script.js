@@ -67,6 +67,26 @@ navLink.addEventListener('click', function (e) {
 })
 
 
+const tabs = document.querySelectorAll(".operations__tab")
+const tabContainer = document.querySelector(".operations__tab-container")
+const tabContents = document.querySelectorAll(".operations__content")
+
+tabContainer.addEventListener('click', function (e) {
+    const clicked = e.target.closest(".operations__tab")
+    if (!clicked) {
+        return
+    }
+
+    //Remove active class for all tab headers and contents
+    tabs.forEach(t => t.classList.remove('operations__tab--active'))
+    tabContents.forEach(t => t.classList.remove('operations__content--active'))
+
+    //Add active class fot tab header and content
+    clicked.classList.add('operations__tab--active')
+    document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add("operations__content--active")
+})
+
+
 // ///lecture
 // //Select elements
 // console.log(document.documentElement)
@@ -173,14 +193,14 @@ navLink.addEventListener('click', function (e) {
 //DOM TRANSVERSING
 
 
-const h1 = document.querySelector('h1')
-//Selecting child, no matter how downward it takes
-console.log(h1.querySelectorAll(".highlight"))
-console.log(h1.children)
-//Selecting parent, no matter how upward it takes
-console.log(h1.closest(".header"))
-//Selecting sibling
-console.log(h1.nextElementSibling)
-console.log(h1.previousElementSibling)
-console.log(h1.parentElement.children)
+// const h1 = document.querySelector('h1')
+// //Selecting child, no matter how downward it takes
+// console.log(h1.querySelectorAll(".highlight"))
+// console.log(h1.children)
+// //Selecting parent, no matter how upward it takes
+// console.log(h1.closest(".header"))
+// //Selecting sibling
+// console.log(h1.nextElementSibling)
+// console.log(h1.previousElementSibling)
+// console.log(h1.parentElement.children)
 
