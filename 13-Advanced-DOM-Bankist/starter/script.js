@@ -1,5 +1,6 @@
 'use strict';
 
+
 ///////////////////////////////////////
 // Modal window
 
@@ -15,6 +16,19 @@ const tabContents = document.querySelectorAll(".operations__content")
 const navLink = document.querySelector(".nav__links")
 
 const nav = document.querySelector(".nav")
+
+
+const slides = document.querySelectorAll(".slide")
+const btnLeft = document.querySelector(".slider__btn--left")
+const btnRight = document.querySelector(".slider__btn--right")
+
+const slider = document.querySelectorAll(".slider")
+
+
+
+//Init
+let currentSlide = 0
+let maxSlide = slides.length - 1
 
 const openModal = function (event) {
     event.preventDefault()
@@ -188,6 +202,82 @@ const imageObserver = new IntersectionObserver(function (e, o) {
 imageTarget.forEach(image => {
     imageObserver.observe(image)
 })
+
+//Slider
+
+
+slides.forEach((slide, i) => {
+    slide.style.transform = `translateX(${i * 100}%)`
+})
+
+function goToSlide(slideNumber) {
+    slides.forEach((slide, i) => {
+        slide.style.transform = `translateX(${100 * (i - slideNumber)}%)`
+    })
+    activateDot(slideNumber)
+}
+
+function nextSlide() {
+    if (currentSlide === maxSlide) {
+        currentSlide = 0
+    } else {
+        currentSlide++
+
+    }
+    goToSlide(currentSlide)
+}
+
+btnRight.addEventListener('click', nextSlide)
+
+function previousSlide(e) {
+    if (currentSlide === 0) {
+        currentSlide = maxSlide
+    } else {
+        currentSlide--
+
+    }
+    goToSlide(currentSlide)
+}
+
+btnLeft.addEventListener('click', previousSlide)
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === "ArrowRight") {
+        nextSlide()
+    } else if (e.key === "ArrowLeft") {
+        previousSlide()
+    }
+})
+
+const dotContainer = document.querySelector(".dots")
+createDots()
+
+goToSlide(0)
+function createDots() {
+    slides.forEach(function (_, i) {
+        dotContainer.insertAdjacentHTML('beforeend',
+            `<button class="dots__dot" data-slide="${i}"></button>`
+        )
+    })
+}
+
+dotContainer.addEventListener('click', function (e) {
+    if (!e.target.classList.contains("dots__dot")) {
+        return
+    }
+    console.log(e.target.dataset.slide)
+    goToSlide(e.target.dataset.slide)
+    activateDot(e.target.dataset.slide)
+})
+
+function activateDot(currentSlide) {
+    document.querySelectorAll(".dots__dot").forEach(d => {
+        d.classList.remove("dots__dot--active")
+    })
+
+    document.querySelector(`.dots__dot[data-slide="${currentSlide}"`).classList.add("dots__dot--active")
+}
+
 
 
 
