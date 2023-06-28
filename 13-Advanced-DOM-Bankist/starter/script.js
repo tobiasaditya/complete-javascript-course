@@ -144,6 +144,24 @@ const headerObserver = new IntersectionObserver(function (e, o) {
 headerObserver.observe(header)
 
 
+//Reveal section
+const allSections = document.querySelectorAll('.section')
+const sectionObserver = new IntersectionObserver(function (e, o) {
+    const [entry] = e
+    if (entry.isIntersecting) {
+        entry.target.classList.remove("section--hidden")
+    }
+
+}, {
+    root: null,
+    threshold: 0.15
+})
+
+allSections.forEach(s => {
+    s.classList.add("section--hidden")
+    sectionObserver.observe(s)
+})
+
 
 
 // ///lecture
