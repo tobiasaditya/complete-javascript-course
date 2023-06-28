@@ -111,9 +111,17 @@ nav.addEventListener('mouseover', function (e) {
     handleHover(e, 0.5)
 })
 
-
 nav.addEventListener('mouseout', function (e) {
     handleHover(e, 1)
+})
+
+//Make nav sticky
+window.addEventListener('scroll', function (e) {
+    if (this.scrollY > nav.getAttribute("y")) {
+        nav.classList.add("sticky")
+    } else {
+        nav.classList.remove("sticky")
+    }
 })
 
 
