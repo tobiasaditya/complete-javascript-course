@@ -162,6 +162,33 @@ allSections.forEach(s => {
     sectionObserver.observe(s)
 })
 
+//Lazy loading image
+const imageTarget = document.querySelectorAll("img[data-src]") //select all images with data-src attribute
+
+const imageObserver = new IntersectionObserver(function (e, o) {
+    const [entry] = e
+    console.log(entry)
+    if (!entry.isIntersecting) {
+        return
+    }
+    entry.target.setAttribute("src", entry.target.dataset.src)
+
+    //Remove blue if image load has been completed
+    entry.target.addEventListener('load', function (e) {
+        entry.target.classList.remove("lazy-img")
+    })
+    imageObserver.unobserve(entry.target)
+
+}, {
+    root: null,
+    threshold: 0,
+    rootMargin: "200px"
+})
+
+imageTarget.forEach(image => {
+    imageObserver.observe(image)
+})
+
 
 
 // ///lecture
