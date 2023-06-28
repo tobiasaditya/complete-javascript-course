@@ -116,13 +116,33 @@ nav.addEventListener('mouseout', function (e) {
 })
 
 //Make nav sticky
-window.addEventListener('scroll', function (e) {
-    if (this.scrollY > nav.getAttribute("y")) {
+// window.addEventListener('scroll', function (e) {
+//     if (this.scrollY > nav.getAttribute("y")) {
+//         nav.classList.add("sticky")
+//     } else {
+//         nav.classList.remove("sticky")
+//     }
+// })
+
+//Make nav sticky using observer API
+const header = document.querySelector('.header')
+const headerObserver = new IntersectionObserver(function (e, o) {
+    const [entry] = e
+    // console.log(entry)
+    if (!entry.isIntersecting) {
         nav.classList.add("sticky")
-    } else {
+    }
+    else {
         nav.classList.remove("sticky")
     }
+
+}, {
+    root: null,
+    threshold: 0,
+    rootMargin: `-${nav.getBoundingClientRect().height}px`
 })
+headerObserver.observe(header)
+
 
 
 
