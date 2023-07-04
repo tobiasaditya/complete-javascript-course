@@ -56,6 +56,15 @@ class App {
         inputDistance.focus()
     }
 
+    _hideForm() {
+        form.style.display = 'none' //biar ilang langsung tanpa animasi(?)
+        form.classList.add("hidden")
+        setTimeout(() => { form.style.display = 'grid' }, 1000)
+
+        inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = ""
+
+    }
+
     _toggleElevationField(event) {
         event.preventDefault()
         inputElevation.closest(".form__row").classList.toggle('form__row--hidden')
@@ -101,19 +110,17 @@ class App {
         //Add new object to workout array
         this.#workouts.push(workout)
         //Render marker
-        this.renderWorkoutMarker(workout)
+        this._renderWorkoutMarker(workout)
 
         //Render worker list
-
+        this._renderWorkout(workout)
+        console.log(workout.getDescription())
         //Hide form, clear input field
-        inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = ""
-
-
-
+        this._hideForm()
 
     }
 
-    renderWorkoutMarker(workout) {
+    _renderWorkoutMarker(workout) {
         L.marker(workout.coords).addTo(this.#map)
             .bindPopup(L.popup({
                 maxWidth: 250,
@@ -122,8 +129,57 @@ class App {
                 closeOnClick: false,
                 className: `${workout.name}-popup`
             }))
-            .setPopupContent(workout.name + "")
+            .setPopupContent(workout.getDescription())
             .openPopup();
+    }
+
+    _renderWorkout(workout) {
+        let html = `
+        <li class="workout workout--${workout.name}" data-id="${workout.id}">
+          <h2 class="workout__title">${workout.getDescription()}</h2>
+          <div class="workout__details">
+            <span class="workout__icon">${workout.name === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
+            <span class="workout__value">${workout.distance}</span>
+            <span class="workout__unit">km</span>
+          </div >
+          <div class="workout__details">
+            <span class="workout__icon">⏱</span>
+            <span class="workout__value">${workout.duration}</span>
+            <span class="workout__unit">min</span>
+          </div>`
+
+        if (workout.name === 'running') {
+            html +=
+                `<div class="workout__details">
+                <span class="workout__icon">⚡️</span>
+                <span class="workout__value">${workout.pace.toFixed(1)}</span>
+                <span class="workout__unit">min/km</span>
+            </div>
+            <div class="workout__details">
+                <span class="workout__icon">🦶🏼</span>
+                <span class="workout__value">${workout.cadence}</span>
+                <span class="workout__unit">spm</span>
+            </div>
+            </li > `
+        }
+        else {
+            html += `
+            <div class="workout__details">
+                <span class="workout__icon">⚡️</span>
+                <span class="workout__value">${workout.speed.toFixed(1)}</span>
+                <span class="workout__unit">km/h</span>
+            </div>
+            <div class="workout__details">
+                <span class="workout__icon">⛰</span>
+                <span class="workout__value">${workout.elevation}</span>
+                <span class="workout__unit">m</span>
+            </div>
+            </li>`
+        }
+
+        form.insertAdjacentHTML('afterend', html)
+
+
     }
 }
 
@@ -131,18 +187,25 @@ class Workout {
     date = new Date()
     id = (Date.now() + "").slice(-10)
 
-    constructor(coords, distance, duration) {
+    constructor(coords, distance, duration, name) {
         this.coords = coords //in [lat,long]
         this.distance = distance //in km
         this.duration = duration //in minutes
-
+        this.name = name
     }
+
+    getDescription() {
+        this.description = `${this.name.toUpperCase()[0]}${this.name.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()} `
+        return this.description
+    }
+
+
 }
 
 class Running extends Workout {
     name = "running"
     constructor(coords, distance, duration, cadence) {
-        super(coords, distance, duration)
+        super(coords, distance, duration, "running")
         this.cadence = cadence
         this.pace = this.calcPace()
     }
@@ -156,7 +219,7 @@ class Running extends Workout {
 class Cycling extends Workout {
     name = "cycling"
     constructor(coords, distance, duration, elevation) {
-        super(coords, distance, duration)
+        super(coords, distance, duration, "cycling")
         this.elevation = elevation
         this.speed = this.calcSpeed()
 
