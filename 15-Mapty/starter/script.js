@@ -82,5 +82,51 @@ class App {
     }
 }
 
+class Workout {
+    date = new Date()
+    id = (Date.now() + "").slice(-10)
+
+    constructor(coords, distance, duration) {
+        this.coords = coords //in [lat,long]
+        this.distance = distance //in km
+        this.duration = duration //in minutes
+
+    }
+}
+
+class Running extends Workout {
+    name = "Running"
+    constructor(coords, distance, duration, cadence) {
+        super(coords, distance, duration)
+        this.cadence = cadence
+        this.pace = this.calcPace()
+    }
+
+    calcPace() {
+        // minutes/km
+        return this.duration / this.distance
+    }
+}
+
+class Cycling extends Workout {
+    name = "Cycling"
+    constructor(coords, distance, duration, elevation) {
+        super(coords, distance, duration)
+        this.elevation = elevation
+        this.speed = this.calcSpeed()
+
+    }
+
+    calcSpeed() {
+        // km/hour
+        return this.distance / (this.duration / 60)
+    }
+}
+
 
 const app = new App()
+
+// const run1 = new Running([10, 10], 10, 60, 15)
+// const cycle1 = new Cycling([10, 10], 20, 120, 10)
+// console.log(run1)
+// console.log(cycle1)
