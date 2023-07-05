@@ -18,13 +18,31 @@ class App {
     #map
     #mapEvent
     #workouts = []
+    #mapZoomLevel = 13
     constructor() {
         this._getPosition()
 
         form.addEventListener('submit', this._newWorkout.bind(this))
 
         inputType.addEventListener('change', this._toggleElevationField.bind(this))
+        containerWorkouts.addEventListener('click', this._moveToPopup.bind(this))
+    }
 
+    _moveToPopup(event) {
+        const workoutEl = event.target.closest(".workout")
+        if (!workoutEl) {
+            return
+        }
+
+        const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id)
+        console.log(workout)
+
+        this.#map.setView(workout.coords, this.#mapZoomLevel, {
+            animate: true,
+            pan: {
+                duration: 1
+            }
+        })
     }
 
     _getPosition() {
@@ -37,7 +55,7 @@ class App {
         const { latitude, longitude } = position.coords
         console.log(latitude, longitude)
 
-        this.#map = L.map('map').setView([latitude, longitude], 13);
+        this.#map = L.map('map').setView([latitude, longitude], this.#mapZoomLevel);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
