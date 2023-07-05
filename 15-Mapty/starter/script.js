@@ -21,6 +21,11 @@ class App {
     #mapZoomLevel = 13
     constructor() {
         this._getPosition()
+        this.#workouts = this._loadLocalStorage()
+        this.#workouts.forEach(workout => {
+            console.log(workout)
+            this._renderWorkout(workout)
+        })
 
         form.addEventListener('submit', this._newWorkout.bind(this))
 
@@ -65,6 +70,10 @@ class App {
 
         //Handling click on map
         this.#map.on('click', this._showForm.bind(this))
+
+        this.#workouts.forEach(workout => {
+            this._renderWorkoutMarker(workout)
+        })
 
     }
 
@@ -132,10 +141,12 @@ class App {
 
         //Render worker list
         this._renderWorkout(workout)
-        console.log(workout.getDescription())
+
         //Hide form, clear input field
         this._hideForm()
 
+        //Save to localStorage for workouts
+        this._setLocalStorage()
     }
 
     _renderWorkoutMarker(workout) {
@@ -199,6 +210,22 @@ class App {
 
 
     }
+
+    _setLocalStorage() {
+        localStorage.setItem('workout', JSON.stringify(this.#workouts))
+    }
+
+    _loadLocalStorage() {
+        const strWorkout = localStorage.getItem("workout")
+        if (!strWorkout) {
+            return []
+        }
+        let loadedWork = JSON.parse(strWorkout)
+        loadedWork.forEach(work => {
+            work.__proto__ = work.type === "running" ? Running.prototype : Cycling.prototype
+        });
+        return loadedWork
+    }
 }
 
 class Workout {
@@ -210,10 +237,10 @@ class Workout {
         this.distance = distance //in km
         this.duration = duration //in minutes
         this.name = name
+        this.description = `${this.name.toUpperCase()[0]}${this.name.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()} `
     }
 
     getDescription() {
-        this.description = `${this.name.toUpperCase()[0]}${this.name.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()} `
         return this.description
     }
 
