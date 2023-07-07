@@ -27,7 +27,7 @@ function getCountryDataByCode(countryCode) {
     request.send()
     request.addEventListener('load', function (e) {
         const response = JSON.parse(request.responseText)
-        console.log(response)
+        // console.log(response)
         renderCountry(response)
 
     })
@@ -42,7 +42,7 @@ function getCountryData(countryName) {
 
     request.addEventListener('load', function (e) {
         const [response] = JSON.parse(this.responseText)
-        console.log(response)
+        // console.log(response)
         renderCountry(response)
 
         //Render neighbour country
@@ -58,7 +58,33 @@ function getCountryData(countryName) {
     })
 }
 
-getCountryData("indonesia")
+// getCountryData("indonesia")
 // getCountryData("netherland")
 // getCountryData("sweden")
 ///////////////////////////////////////
+
+function getCountryData2(countryName) {
+    fetch("https://restcountries.com/v2/name/" + countryName)
+        .then(response => response.json())
+        .then(data => {
+            renderCountry(data[0])
+            //Render neighbour country
+            const neighbour = data[0].borders?.[0]
+
+            if (!neighbour) {
+                return
+            }
+
+            getCountryDataByCode2(neighbour)
+        })
+}
+
+function getCountryDataByCode2(countryCode) {
+    fetch("https://restcountries.com/v2/alpha/" + countryCode)
+        .then(response => response.json())
+        .then(data => {
+            renderCountry(data)
+        })
+}
+
+getCountryData2("usa")
