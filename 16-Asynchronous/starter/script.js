@@ -77,6 +77,14 @@ function getCountryData2(countryName) {
 
             getCountryDataByCode2(neighbour)
         })
+        .catch(err => {
+            console.error(`${err} ckckck`)
+            renderError(`Something went wrong ${err}`)
+
+        })
+        .finally(() => {
+            console.log("Finally!")
+        })
 }
 
 function getCountryDataByCode2(countryCode) {
@@ -85,6 +93,21 @@ function getCountryDataByCode2(countryCode) {
         .then(data => {
             renderCountry(data)
         })
+        .catch(err => {
+            console.error(`${err} hadeh`)
+            renderError(`Something went wrong ${err}`)
+        })
+        .finally(() => {
+            console.log("Finally!")
+        })
 }
 
-getCountryData2("usa")
+function renderError(message) {
+    countriesContainer.insertAdjacentText('beforeend', message)
+    countriesContainer.style.opacity = 1
+}
+
+btn.addEventListener('click', function (e) {
+    getCountryData2("usa")
+})
+
