@@ -112,7 +112,31 @@ function renderError(message) {
     countriesContainer.style.opacity = 1
 }
 
+
+function getCountryDataByCoord(lat, long) {
+    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${long}&localityLanguage=en`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed request with code ${response.status}`)
+            }
+            return response.json()
+        })
+        .then(data => {
+            getCountryData2(data.countryName)
+        })
+        .catch(err => {
+            console.error(`${err} ckckck`)
+            renderError(`Something went wrong ${err}`)
+
+        })
+        .finally(() => {
+            console.log("Finally!")
+        })
+}
+
+
 btn.addEventListener('click', function (e) {
-    getCountryData2("asdasfafa")
+    // getCountryData2("asdasfafa")
+    getCountryDataByCoord(-7.759997, 110.420673)
 })
 
