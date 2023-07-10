@@ -65,7 +65,12 @@ function getCountryData(countryName) {
 
 function getCountryData2(countryName) {
     fetch("https://restcountries.com/v2/name/" + countryName)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed request with code ${response.status}`)
+            }
+            return response.json()
+        })
         .then(data => {
             renderCountry(data[0])
             //Render neighbour country
@@ -108,6 +113,6 @@ function renderError(message) {
 }
 
 btn.addEventListener('click', function (e) {
-    getCountryData2("usa")
+    getCountryData2("asdasfafa")
 })
 
