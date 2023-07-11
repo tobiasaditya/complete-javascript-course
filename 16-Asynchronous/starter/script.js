@@ -134,9 +134,41 @@ function getCountryDataByCoord(lat, long) {
         })
 }
 
+function getPosition() {
+    return new Promise(function (resolve, reject) {
+        navigator.geolocation.getCurrentPosition(resolve, reject)
+    })
+}
+
 
 btn.addEventListener('click', function (e) {
     // getCountryData2("asdasfafa")
-    getCountryDataByCoord(-7.759997, 110.420673)
+    getPosition().then(pos => {
+        const { latitude: lat, longitude: lng } = pos
+        getCountryDataByCoord(lat, lng)
+    })
+
 })
 
+
+const lotteryPromise = new Promise(function (resolve, reject) {
+    console.log("Start lottery")
+    setTimeout(function () {
+        if (Math.random() >= 0.5) {
+            resolve('YOU WIN')
+        } else {
+            reject(new Error('YOU LOSE'))
+        }
+    }, 2000)
+})
+
+lotteryPromise.then(data => console.log(data)).catch(data => console.error(data))
+
+// console.log("start")
+// setTimeout(() => console.log('0 sec timer'), 0)
+// Promise.resolve('Resolved promise 1').then(data => console.log(data))
+// Promise.resolve('Resolved promise 2').then(data => {
+//     for (let i = 0; i < 1000; i++) { }
+//     console.log(data)
+// })
+// console.log("end")
